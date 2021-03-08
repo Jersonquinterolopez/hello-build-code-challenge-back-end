@@ -5,6 +5,7 @@ require('dotenv').config();
 const app = express();
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 // Environment Variables
 const { config } = require('./config/index');
@@ -23,4 +24,19 @@ app.use(express.static('public'));
 // parsing application/json
 app.use(bodyParser.json());
 
+// connect to database
+mongoose.connect(
+  config.dbConnection,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  },
+  (err) => {
+    if (err) throw err;
+    console.log('MongoDB connection stablished');
+  }
+);
+
 // routes
+app.use('/auth', require('./routes/auth'));
