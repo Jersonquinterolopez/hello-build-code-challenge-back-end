@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { UsersService } = require('../services/users');
+const User = require('../models/userModel');
 
 router.post('/sign-up', async (req, res) => {
   try {
@@ -39,6 +40,17 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/check-user', async (req, res) => {
+  const { email } = req.body;
+  const existingUser = await User.findOne({ email: email });
+
+  if (existingUser) {
+    return res.status(200).json({ status: 'EXISTS' });
+  } else {
+    return res.status(200).json({ status: 'DOES NOT EXISTS' });
   }
 });
 
