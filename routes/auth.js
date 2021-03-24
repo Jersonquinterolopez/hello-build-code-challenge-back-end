@@ -5,6 +5,11 @@ const User = require('../models/userModel');
 router.post('/sign-up', async (req, res) => {
   try {
     const { user } = req.body;
+    const existingUser = await User.findOne({ email: user.email });
+    if (existingUser)
+      return res
+        .status(400)
+        .json({ msg: 'This email address is already in use' });
     const savedUser = await UsersService.auth.createUser({ user });
     res.status(201).json({
       data: savedUser,
@@ -48,9 +53,9 @@ router.post('/check-user', async (req, res) => {
   const existingUser = await User.findOne({ email: email });
 
   if (existingUser) {
-    return res.status(200).json({ status: 'EXISTS' });
+    return res.json(true);
   } else {
-    return res.status(200).json({ status: 'DOES NOT EXISTS' });
+    return res.json(false);
   }
 });
 
