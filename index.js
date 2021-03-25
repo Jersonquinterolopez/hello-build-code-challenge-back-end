@@ -40,3 +40,4 @@ mongoose.connect(
 
 // routes
 app.use('/auth', require('./routes/auth'));
+app.use('/github', require('./routes/github'));
