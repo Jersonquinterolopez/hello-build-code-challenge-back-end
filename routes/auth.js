@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { UsersService } = require('../services/users');
+const { UsersService } = require('../services/userService');
 const User = require('../models/userModel');
 
 router.post('/sign-up', async (req, res) => {
@@ -40,7 +40,9 @@ router.post('/login', async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.firstName,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
       },
     });
   } catch (error) {
@@ -58,5 +60,7 @@ router.post('/check-user', async (req, res) => {
     return res.json(false);
   }
 });
+
+// isTokenValid route Pending!
 
 module.exports = router;
