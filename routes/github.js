@@ -64,13 +64,14 @@ router.get('/favorite-repos', auth, async (req, res) => {
   res.status(200).send(reformattedRepos);
 });
 
-router.get('/find-repo/:id', auth, async (req, res) => {
-  const repo = await Repo.findOne({ _id: req.params.id });
+router.post('/find-repo', auth, async (req, res) => {
+  const { name } = req.body;
+  const repo = await Repo.findOne({ name: name });
 
   if (repo) {
-    res.json(true);
+    return res.status(200).send(true);
   } else {
-    res.json(false);
+    return res.status(200).send(false);
   }
 });
 
