@@ -39,4 +39,14 @@ router.patch('/update/:id', auth, async (req, res) => {
   }
 });
 
+router.get('/', auth, async (req, res) => {
+  const user = await User.findById(req.user);
+  res.status(200).json({
+    id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+  });
+});
+
 module.exports = router;

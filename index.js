@@ -39,6 +39,6 @@ mongoose.connect(
 );
 
 // routes
-app.use('/auth', require('./routes/auth'));
-app.use('/github', require('./routes/github'));
-app.use('/user', require('./routes/user'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/github', require('./routes/github'));
+app.use('/api/user', require('./routes/user'));

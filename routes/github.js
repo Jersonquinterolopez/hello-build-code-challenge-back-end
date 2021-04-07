@@ -1,9 +1,10 @@
+const { config } = require('../config');
 const router = require('express').Router();
 const axios = require('axios');
 const authUrl = 'https://github.com/login/oauth/authorize';
 const access_token_url = 'https://github.com/login/oauth/access_token';
-const client_id = process.env.GITHUB_API_CLIENT_ID;
-const client_secret = process.env.GITHUB_API_CLIENT_SECRET;
+const client_id = config.github_client_id;
+const client_secret = config.github_client_secret;
 const scope = 'repo';
 const Repo = require('../models/repoModel');
 const auth = require('../middleware/auth');
@@ -38,9 +39,10 @@ router.get('/auth', async (req, res) => {
 router.post('/add-to-favorite', auth, async (req, res) => {
   try {
     const { repo } = req.body;
-    const { name, url } = repo;
+    const { name, url, id } = repo;
 
     const newFavoriteRepo = new Repo({
+      id: id,
       userId: req.user,
       name,
       url,
@@ -55,7 +57,7 @@ router.post('/add-to-favorite', auth, async (req, res) => {
 
 router.get('/favorite-repos', auth, async (req, res) => {
   const repos = await Repo.find({ userId: req.user });
-  let reformattedRepos = repos.map(({ _id: id, name, url }) => ({
+  let reformattedRepos = repos.map(({ id, name, url }) => ({
     id,
     name,
     url,
@@ -77,8 +79,8 @@ router.post('/find-repo', auth, async (req, res) => {
 
 router.delete('/delete/:id', auth, async (req, res) => {
   try {
-    await Repo.deleteOne({ _id: req.params.id });
-    res.status(204).json();
+    await Repo.deleteOne({ id: req.params.id });
+    res.send('Deleted successfully');
   } catch (error) {
     res.status(400).json({ error: 'No favorite Repo founded, action denied' });
   }

@@ -5,6 +5,8 @@ const config = {
   port: process.env.PORT || 5000,
   dbConnection: process.env.MONGODB_CONNECTION_STRING,
   authJwtSecret: process.env.JWT_TOKEN,
+  github_client_id: process.env.GITHUB_API_CLIENT_ID,
+  github_client_secret: process.env.GITHUB_API_CLIENT_SECRET,
 };
 
 module.exports = { config };
