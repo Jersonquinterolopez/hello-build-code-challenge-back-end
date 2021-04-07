@@ -17,9 +17,14 @@ app.listen(config.port, () =>
 
 // Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: `${config.clientUrl}`,
+  })
+);
 app.use(logger('dev'));
 app.use(express.static('public'));
+app.set('trust proxy', 1);
 
 // parsing application/json
 app.use(bodyParser.json());
