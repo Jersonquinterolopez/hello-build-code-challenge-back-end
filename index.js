@@ -1,6 +1,5 @@
 // Import modules
 const express = require('express');
-const cors = require('cors');
 require('dotenv').config();
 const app = express();
 const logger = require('morgan');
@@ -17,14 +16,13 @@ app.listen(config.port, () =>
 
 // Middlewares
 app.use(express.json());
-app.use(
-  cors({
-    origin: `${config.clientUrl}`,
-  })
-);
 app.use(logger('dev'));
 app.use(express.static('public'));
 app.set('trust proxy', 1);
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 // parsing application/json
 app.use(bodyParser.json());
