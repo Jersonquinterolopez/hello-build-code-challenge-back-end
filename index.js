@@ -19,6 +19,10 @@ app.use(express.json());
 app.use(logger('dev'));
 app.use(express.static('public'));
 app.set('trust proxy', 1);
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 // parsing application/json
 app.use(bodyParser.json());
