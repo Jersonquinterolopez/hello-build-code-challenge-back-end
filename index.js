@@ -3,8 +3,8 @@ const express = require('express');
 require('dotenv').config();
 const app = express();
 const logger = require('morgan');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 // Environment Variables
 const { config } = require('./config/index');
@@ -19,13 +19,18 @@ app.use(express.json());
 app.use(logger('dev'));
 app.use(express.static('public'));
 app.set('trust proxy', 1);
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
+app.use(
+  cors({
+    origin: `${config.clientUrl}`,
+  })
+);
 
 // parsing application/json
-app.use(bodyParser.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
 // connect to database
 mongoose.connect(
